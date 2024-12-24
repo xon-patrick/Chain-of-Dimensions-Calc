@@ -52,6 +52,40 @@ void calculateLength(double c1, double dev_c1_max, double dev_c1_min, int num_re
     *min_deviation = L_min - *L_nominal;
 }
 
+void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dimensions, double L, float totalWidth, float barHeight) {
+    Color segmentColors[] = {DARKBLUE, DARKGREEN, DARKPURPLE, ORANGE, DARKBROWN};
+    Color lColor = RED;
+    
+    double sum_reducing_dims = 0;
+    for (int i = 0; i < num_reducing_dimensions; i++) {
+        sum_reducing_dims += reducing_dims[i];
+    }
+
+    // vallidare proportii
+    double total = sum_reducing_dims + L;
+    if (total <= 0 || C1 <= 0) return; // Avoid division by zero or invalid values
+
+    //from left
+    float startX = 400;
+    float startY = 450;
+
+    // segmente prop
+    for (int i = 0; i < num_reducing_dimensions; i++) {
+        float segmentWidth = (reducing_dims[i] / C1) * totalWidth;
+        DrawRectangle(startX, startY, segmentWidth, barHeight, segmentColors[i % 5]); // Cycle through colors
+        startX += segmentWidth;
+    }
+
+    // L
+    float LWidth = (L / C1) * totalWidth;
+    DrawRectangle(startX, startY, LWidth, barHeight, RED);
+
+    // total bar
+    DrawRectangle(400, 500, totalWidth, 30, DARKGRAY);
+    DrawRectangleLines(400, 450, totalWidth, 100, BLACK);
+}
+
+
 void DrawGUI() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 20); // Set text size globally
 
@@ -104,6 +138,8 @@ void DrawGUI() {
     if (GuiButton((Rectangle){ 600, 300, 120, 50 }, "Calculate")) {
         calculateLength(c1, dev_c1_max, dev_c1_min, dimension_count, reducing_dims, dev_reducing_dims, &L_nominal, &max_deviation, &min_deviation);
     }
+
+    DrawRepresentation(c1, reducing_dims, dimension_count, L_nominal, 450, 30);
 
     GuiLabel((Rectangle){ 550, 10, 300, 40 }, "Cota Claculata (L)");
     GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
