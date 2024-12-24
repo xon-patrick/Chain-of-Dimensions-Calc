@@ -28,7 +28,6 @@ void calculateLength(double c1, double dev_c1_max, double dev_c1_min, int num_re
     double min_dev_reducing_dims = 0;
     double max_dev_reducing_dims = 0;
 
-    // Calculate sum of reducing dimensions and min/max deviations
     for (int i = 0; i < num_reducing_dimensions; i++) {
         sum_reducing_dims += reducing_dims[i];
         min_dev_reducing_dims += dev_reducing_dims[i * 2 + 1];  // abaterile inferioare
