@@ -8,17 +8,20 @@ This project calculates dimensions in a chain of dimensions based on user input 
 
 ![Increasing Dim](images/cote_maritoare.png)
 
-- takes up to 5 reducing dimensions and their deviations
+- Takes up to 5 reducing dimensions and their deviations
 
 ![Reducing Dims](images/cote_micsoratoare.png)
 
-- you can add or remove reucing dimensions with buttons next to "Cote Micsoratoare"
+- you can add or remove reducing dimensions with buttons next to "Cote Micsoratoare"
 
 ![add/delete](images/add_or_delete.png)
 
 - Display of calculated value of the unknown dimension in the chain of dimensions
 
 ![result](images/result.png)
+
+- Visual Representations of Reducing dimensions and L out of the Increasing Dimensions after pressing Calculate
+![example](images/example.png)
 
 ## Dependencies
 
@@ -30,9 +33,3 @@ This project requires the raylib and raygui to be installed
 **./main.exe**
 
 ![build](images/build.png)
-
-## Plan
-
-This is how I plan for the fornt panel to look:
-
-![idea](images/idea.png)

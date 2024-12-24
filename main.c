@@ -55,7 +55,7 @@ void calculateLength(double c1, double dev_c1_max, double dev_c1_min, int num_re
 void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dimensions, double L, float totalWidth, float barHeight) {
     Color segmentColors[] = {DARKBLUE, DARKGREEN, DARKPURPLE, ORANGE, DARKBROWN};
     Color lColor = RED;
-    
+
     double sum_reducing_dims = 0;
     for (int i = 0; i < num_reducing_dimensions; i++) {
         sum_reducing_dims += reducing_dims[i];
@@ -65,7 +65,7 @@ void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dime
     double total = sum_reducing_dims + L;
     if (total <= 0 || C1 <= 0) return; // Avoid division by zero or invalid values
 
-    //from left
+    // starting coords
     float startX = 400;
     float startY = 450;
 
@@ -73,6 +73,13 @@ void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dime
     for (int i = 0; i < num_reducing_dimensions; i++) {
         float segmentWidth = (reducing_dims[i] / C1) * totalWidth;
         DrawRectangle(startX, startY, segmentWidth, barHeight, segmentColors[i % 5]); // Cycle through colors
+
+        // Label
+        DrawText(TextFormat("c%d", i + 1), 
+                 startX + segmentWidth / 2 - MeasureText(TextFormat("c%d", i + 1), 20) / 2, 
+                 startY - 25, 
+                 20, BLACK);
+
         startX += segmentWidth;
     }
 
@@ -80,9 +87,14 @@ void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dime
     float LWidth = (L / C1) * totalWidth;
     DrawRectangle(startX, startY, LWidth, barHeight, RED);
 
-    // total bar
+    // cotat maritoare
     DrawRectangle(400, 500, totalWidth, 30, DARKGRAY);
-    DrawRectangleLines(400, 450, totalWidth, 100, BLACK);
+    // outline
+    DrawRectangleLinesEx((Rectangle){400, 450, totalWidth, 80}, 3, BLACK);
+
+    //labels
+    DrawText("L", startX + LWidth / 2 - MeasureText("L", 20) / 2, startY - 25, 20, BLACK);
+    DrawText("Cota Maritoare", 400 + totalWidth / 2 - MeasureText("Cota Maritoare", 20) / 2, 540, 20, BLACK);
 }
 
 
