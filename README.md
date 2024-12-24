@@ -21,11 +21,12 @@ This project calculates dimensions in a chain of dimensions based on user input 
 ![result](images/result.png)
 
 - Visual Representations of Reducing dimensions and L out of the Increasing Dimensions after pressing Calculate
+
 ![example](images/example.png)
 
 ## Dependencies
 
-This project requires the raylib and raygui to be installed
+This project requires the [raylib](https://github.com/raysan5/raygui) and [raygui](https://github.com/raysan5/raylib) to be installed
 
 ## Build & Run
 
