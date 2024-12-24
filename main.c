@@ -23,7 +23,6 @@ int dimension_count = 0;
 
 static int activeTextBox = -1; // active text box
 
-// Store the results in static variables
 static double L_nominal = 0;
 static double max_deviation = 0;
 static double min_deviation = 0;
@@ -62,7 +61,7 @@ void DrawGUI() {
 
     GuiLabel((Rectangle){ 20, 20, 200, 20 }, "Cota maritoare");
     static char cota_maritoare[16] = "";
-    if (GuiTextBox((Rectangle){ 30, 120, 130, 40 }, cota_maritoare, 16, activeTextBox == 0)) activeTextBox = 0;
+    if (GuiTextBox((Rectangle){ 30, 120, 100, 40 }, cota_maritoare, 16, activeTextBox == 0)) activeTextBox = 0;
 
     GuiLabel((Rectangle){ 210, 160, 200, 20 }, "Abatere inferioara");
     static char abatere_inferioara[16] = "";
@@ -102,15 +101,19 @@ void DrawGUI() {
     double dev_c1_max = TextToFloat(abatere_superioara);
     double dev_c1_min = TextToFloat(abatere_inferioara);
     
-    // Perform the calculation only when the button is pressed
     if (GuiButton((Rectangle){ 600, 300, 120, 50 }, "Calculate")) {
         calculateLength(c1, dev_c1_max, dev_c1_min, dimension_count, reducing_dims, dev_reducing_dims, &L_nominal, &max_deviation, &min_deviation);
     }
 
     GuiLabel((Rectangle){ 550, 10, 300, 40 }, "Cota Claculata (L)");
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
     GuiLabel((Rectangle){ 650, 100, 300, 40 }, TextFormat("%.2f ", max_deviation));
-    GuiLabel((Rectangle){ 600, 100, 300, 80 }, TextFormat("%.2f mm", L_nominal));
-    GuiLabel((Rectangle){ 650, 140, 300, 40 }, TextFormat("%.2f ", min_deviation));
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 40);
+    GuiLabel((Rectangle){ 575, 100, 300, 100 }, TextFormat("%.2f mm", L_nominal));
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
+    GuiLabel((Rectangle){ 650, 160, 300, 40 }, TextFormat("%.2f ", min_deviation));
+
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
 }
 
 int main(void) {
