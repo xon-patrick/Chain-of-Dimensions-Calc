@@ -45,6 +45,15 @@ Language english = {
     "Calculated Dimension (L)"
 };
 
+Language german = {
+    "Obere Abweichung",
+    "Erhöhende Dimension",
+    "Untere Abweichung",
+    "Reduzierende Dimensionen",
+    "Berechnen",
+    "Berechnete Dimension (L)"
+};
+
 Language* currentLanguage = &romanian;
 
 Dimension dimensions[MAX_DIMENSIONS];
@@ -131,16 +140,18 @@ void DrawGUI() {
 
     static int language = 0;
     static bool dropdownEditMode = false;
-    const char* languages[] = {"RO ", "ENG "};
+    const char* languages[] = {"RO ", "ENG ", "DE "};
 
-    if (GuiDropdownBox((Rectangle){ GetScreenWidth() - 110, 10, 80, 30 }, "RO;ENG", &language, dropdownEditMode)) {
+    if (GuiDropdownBox((Rectangle){ GetScreenWidth() - 110, 10, 80, 30 }, "RO;ENG;DE", &language, dropdownEditMode)) {
         dropdownEditMode = !dropdownEditMode;
     }
 
     if (language == 0) {
         currentLanguage = &romanian;
-    } else {
+    } else if(language == 1){
         currentLanguage = &english;
+    } else {
+        currentLanguage = &german;
     }
 
     GuiLabel((Rectangle){ 210, 90, 200, 30 }, currentLanguage->abatere_superioara);
