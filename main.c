@@ -18,6 +18,35 @@ typedef struct {
     double lower_deviation;
 } Dimension;
 
+typedef struct {
+    const char* abatere_superioara;
+    const char* cota_maritoare;
+    const char* abatere_inferioara;
+    const char* cote_micsoratoare;
+    const char* calculate;
+    const char* cota_calculata;
+} Language;
+
+Language romanian = {
+    "Abatere superioara",
+    "Cota maritoare",
+    "Abatere inferioara",
+    "Cote micsoratoare",
+    "Calculeaza",
+    "Cota Calculata (L)"
+};
+
+Language english = {
+    "Upper Deviation",
+    "Increasing Dimension",
+    "Lower Deviation",
+    "Reducing Dimensions",
+    "Calculate",
+    "Calculated Dimension (L)"
+};
+
+Language* currentLanguage = &romanian;
+
 Dimension dimensions[MAX_DIMENSIONS];
 int dimension_count = 0;
 
@@ -27,7 +56,7 @@ static double L_nominal = 0;
 static double max_deviation = 0;
 static double min_deviation = 0;
 
-void calculateLength(double c1, double dev_c1_max, double dev_c1_min, int num_reducing_dimensions, double reducing_dims[], double dev_reducing_dims[], double* L_nominal, double* max_deviation, double* min_deviation) {
+void calculateLength(double C1/*increasing dim*/, double dev_C1_max, double dev_C1_min, int num_reducing_dimensions, double reducing_dims[], double dev_reducing_dims[], double* L_nominal, double* max_deviation, double* min_deviation) {
     double sum_reducing_dims = 0;
     double min_dev_reducing_dims = 0;
     double max_dev_reducing_dims = 0;
@@ -39,13 +68,13 @@ void calculateLength(double c1, double dev_c1_max, double dev_c1_min, int num_re
     }
 
     // valoare nominala a cotei dorite
-    *L_nominal = c1 - sum_reducing_dims;
+    *L_nominal = C1 - sum_reducing_dims;
 
     // valoarea maxima
-    double L_max = (c1 + dev_c1_max) - (sum_reducing_dims + min_dev_reducing_dims);
+    double L_max = (C1 + dev_C1_max) - (sum_reducing_dims + min_dev_reducing_dims);
 
     // valoarea minima
-    double L_min = (c1 - dev_c1_min) - (sum_reducing_dims + max_dev_reducing_dims);
+    double L_min = (C1 - dev_C1_min) - (sum_reducing_dims + max_dev_reducing_dims);
 
     // abaterile
     *max_deviation = L_max - *L_nominal;
@@ -94,26 +123,39 @@ void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dime
 
     //labels
     DrawText("L", startX + LWidth / 2 - MeasureText("L", 20) / 2, startY - 25, 20, BLACK);
-    DrawText("Cota Maritoare", 400 + totalWidth / 2 - MeasureText("Cota Maritoare", 20) / 2, 540, 20, BLACK);
+    DrawText(currentLanguage->cota_maritoare, 400 + totalWidth / 2 - MeasureText(currentLanguage->cota_maritoare, 20) / 2, 540, 20, BLACK);
 }
-
 
 void DrawGUI() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 20); // Set text size globally
 
-    GuiLabel((Rectangle){ 210, 90, 200, 30 }, "Abatere superioara");
+    static int language = 0;
+    static bool dropdownEditMode = false;
+    const char* languages[] = {"RO ", "ENG "};
+
+    if (GuiDropdownBox((Rectangle){ GetScreenWidth() - 110, 10, 80, 30 }, "RO;ENG", &language, dropdownEditMode)) {
+        dropdownEditMode = !dropdownEditMode;
+    }
+
+    if (language == 0) {
+        currentLanguage = &romanian;
+    } else {
+        currentLanguage = &english;
+    }
+
+    GuiLabel((Rectangle){ 210, 90, 200, 30 }, currentLanguage->abatere_superioara);
     static char abatere_superioara[16] = "";
     if (GuiTextBox((Rectangle){ 130, 90, 70, 30 }, abatere_superioara, 16, activeTextBox == 1)) activeTextBox = 1;
 
-    GuiLabel((Rectangle){ 20, 20, 200, 20 }, "Cota maritoare");
+    GuiLabel((Rectangle){ 20, 20, 200, 20 }, currentLanguage->cota_maritoare);
     static char cota_maritoare[16] = "";
     if (GuiTextBox((Rectangle){ 30, 120, 100, 40 }, cota_maritoare, 16, activeTextBox == 0)) activeTextBox = 0;
 
-    GuiLabel((Rectangle){ 210, 160, 200, 20 }, "Abatere inferioara");
+    GuiLabel((Rectangle){ 210, 160, 200, 20 }, currentLanguage->abatere_inferioara);
     static char abatere_inferioara[16] = "";
     if (GuiTextBox((Rectangle){ 130, 160, 70, 30 }, abatere_inferioara, 16, activeTextBox == 2)) activeTextBox = 2;
 
-    GuiLabel((Rectangle){ 20, 210, 200, 30 }, "Cote micsoratoare");
+    GuiLabel((Rectangle){ 20, 210, 200, 30 }, currentLanguage->cote_micsoratoare);
     if (GuiButton((Rectangle){ 240, 210, 40, 40 }, "+")) {
         if (dimension_count < MAX_DIMENSIONS) {
             dimension_count++;
@@ -147,13 +189,13 @@ void DrawGUI() {
     double dev_c1_max = TextToFloat(abatere_superioara);
     double dev_c1_min = TextToFloat(abatere_inferioara);
     
-    if (GuiButton((Rectangle){ 600, 300, 120, 50 }, "Calculate")) {
+    if (GuiButton((Rectangle){ 600, 300, 120, 50 }, currentLanguage->calculate)) {
         calculateLength(c1, dev_c1_max, dev_c1_min, dimension_count, reducing_dims, dev_reducing_dims, &L_nominal, &max_deviation, &min_deviation);
     }
 
     DrawRepresentation(c1, reducing_dims, dimension_count, L_nominal, 450, 30);
 
-    GuiLabel((Rectangle){ 550, 10, 300, 40 }, "Cota Claculata (L)");
+    GuiLabel((Rectangle){ 550, 10, 300, 40 }, currentLanguage->cota_calculata);
     GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
     GuiLabel((Rectangle){ 650, 100, 300, 40 }, TextFormat("%.2f ", max_deviation));
     GuiSetStyle(DEFAULT, TEXT_SIZE, 40);

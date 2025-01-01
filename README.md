@@ -4,33 +4,35 @@ This project calculates dimensions in a chain of dimensions based on user input 
 
 ## Features
 
-- Takes from user the nominal value and its upper and lower deviation for the increasing dimension:
+- Takes from the user the nominal value and its upper and lower deviation for the increasing dimension:
 
 ![Increasing Dim](images/cote_maritoare.png)
 
-- Takes up to 5 reducing dimensions and their deviations
+- Takes up to 5 reducing dimensions and their deviations:
 
 ![Reducing Dims](images/cote_micsoratoare.png)
 
-- you can add or remove reducing dimensions with buttons next to "Cote Micsoratoare"
+- You can add or remove reducing dimensions with buttons next to "Cote Micsoratoare":
 
 ![add/delete](images/add_or_delete.png)
 
-- Display of calculated value of the unknown dimension in the chain of dimensions
+- Displays the calculated value of the unknown dimension in the chain of dimensions:
 
 ![result](images/result.png)
 
-- Visual Representations of Reducing dimensions and L out of the Increasing Dimensions after pressing Calculate
+- Visual representations of reducing dimensions and L out of the increasing dimensions after pressing Calculate:
 
 ![example](images/example.png)
 
 ## Dependencies
 
-This project requires the [raylib](https://github.com/raysan5/raygui) and [raygui](https://github.com/raysan5/raylib) to be installed
+This project requires the [raylib](https://github.com/raysan5/raylib) and [raygui](https://github.com/raysan5/raygui) libraries to be installed.
 
 ## Build & Run
 
-**gcc main.c -o main.exe -lraylib**
-**./main.exe**
+```sh
+gcc main.c -o main.exe -lraylib
+./main.exe
+```
 
 ![build](images/build.png)
