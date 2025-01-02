@@ -23,6 +23,7 @@ typedef struct {
     const char* cota_maritoare;
     const char* abatere_inferioara;
     const char* cote_micsoratoare;
+    const char* cota_micsoratoare;
     const char* calculate;
     const char* cota_calculata;
 } Language;
@@ -32,6 +33,7 @@ Language romanian = {
     "Cota maritoare",
     "Abatere inferioara",
     "Cote micsoratoare",
+    "Cota micsoratoare",
     "Calculeaza",
     "Cota Calculata (L)"
 };
@@ -41,6 +43,7 @@ Language english = {
     "Increasing Dimension",
     "Lower Deviation",
     "Reducing Dimensions",
+    "Reducing Dim",
     "Calculate",
     "Calculated Dimension (L)"
 };
@@ -50,6 +53,7 @@ Language german = {
     "Erhöhende Dimension",
     "Untere Abweichung",
     "Reduzierende Dimensionen",
+    "Reduzierende Dim",
     "Berechnen",
     "Berechnete Dimension (L)"
 };
@@ -166,7 +170,7 @@ void DrawGUI() {
     static char abatere_inferioara[16] = "";
     if (GuiTextBox((Rectangle){ 130, 160, 70, 30 }, abatere_inferioara, 16, activeTextBox == 2)) activeTextBox = 2;
 
-    GuiLabel((Rectangle){ 20, 210, 200, 30 }, currentLanguage->cote_micsoratoare);
+    GuiLabel((Rectangle){ 20, 210, 230, 30 }, currentLanguage->cote_micsoratoare);
     if (GuiButton((Rectangle){ 240, 210, 40, 40 }, "+")) {
         if (dimension_count < MAX_DIMENSIONS) {
             dimension_count++;
@@ -186,7 +190,7 @@ void DrawGUI() {
     double dev_reducing_dims[MAX_DIMENSIONS * 2] = {0};
 
     for (int i = 0; i < dimension_count; i++) {
-        GuiLabel((Rectangle){ 120, 270 + i * 150, 200, 30 }, TextFormat("Cota micsoratoare %d", i + 1));
+        GuiLabel((Rectangle){ 120, 270 + i * 150, 200, 30 }, TextFormat("%s %d", currentLanguage->cota_micsoratoare, i + 1));
         if (GuiTextBox((Rectangle){ 230, 300 + i * 150, 70, 40 }, upper_dev[i], 16, activeTextBox == (3 + i * 3))) activeTextBox = 3 + i * 3;
         if (GuiTextBox((Rectangle){ 130, 340 + i * 150, 100, 40 }, nominal[i], 16, activeTextBox == (4 + i * 3))) activeTextBox = 4 + i * 3;
         if (GuiTextBox((Rectangle){ 230, 380 + i * 150, 70, 40 }, lower_dev[i], 16, activeTextBox == (5 + i * 3))) activeTextBox = 5 + i * 3;
