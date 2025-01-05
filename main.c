@@ -13,9 +13,9 @@ float TextToFloat(const char *text) {
 #define MAX_DIMENSIONS 5
 
 typedef struct {
-    double nominal;
-    double upper_deviation;
-    double lower_deviation;
+    float nominal;
+    float upper_deviation;
+    float lower_deviation;
 } Dimension;
 
 typedef struct {
@@ -65,14 +65,14 @@ int dimension_count = 0;
 
 static int activeTextBox = -1; // active text box
 
-static double L_nominal = 0;
-static double max_deviation = 0;
-static double min_deviation = 0;
+static float L_nominal = 0;
+static float max_deviation = 0;
+static float min_deviation = 0;
 
-void calculateLength(double C1/*increasing dim*/, double dev_C1_max, double dev_C1_min, int num_reducing_dimensions, double reducing_dims[], double dev_reducing_dims[], double* L_nominal, double* max_deviation, double* min_deviation) {
-    double sum_reducing_dims = 0;
-    double min_dev_reducing_dims = 0;
-    double max_dev_reducing_dims = 0;
+void calculateLength(float C1/*increasing dim*/, float dev_C1_max, float dev_C1_min, int num_reducing_dimensions, float reducing_dims[], float dev_reducing_dims[], float* L_nominal, float* max_deviation, float* min_deviation) {
+    float sum_reducing_dims = 0;
+    float min_dev_reducing_dims = 0;
+    float max_dev_reducing_dims = 0;
 
     for (int i = 0; i < num_reducing_dimensions; i++) {
         sum_reducing_dims += reducing_dims[i];
@@ -83,28 +83,24 @@ void calculateLength(double C1/*increasing dim*/, double dev_C1_max, double dev_
     // valoare nominala a cotei dorite
     *L_nominal = C1 - sum_reducing_dims;
 
-    // valoarea maxima
-    double L_max = (C1 + dev_C1_max) - (sum_reducing_dims + min_dev_reducing_dims);
+    // abatere maxima
+    *max_deviation = dev_C1_max - min_dev_reducing_dims;
 
-    // valoarea minima
-    double L_min = (C1 - dev_C1_min) - (sum_reducing_dims + max_dev_reducing_dims);
-
-    // abaterile
-    *max_deviation = L_max - *L_nominal;
-    *min_deviation = L_min - *L_nominal;
+    // abatere minima
+    *min_deviation = dev_C1_min - max_dev_reducing_dims;
 }
 
-void DrawRepresentation(double C1, double reducing_dims[], int num_reducing_dimensions, double L, float totalWidth, float barHeight) {
+void DrawRepresentation(float C1, float reducing_dims[], int num_reducing_dimensions, float L, float totalWidth, float barHeight) {
     Color segmentColors[] = {DARKBLUE, DARKGREEN, DARKPURPLE, ORANGE, DARKBROWN};
     Color lColor = RED;
 
-    double sum_reducing_dims = 0;
+    float sum_reducing_dims = 0;
     for (int i = 0; i < num_reducing_dimensions; i++) {
         sum_reducing_dims += reducing_dims[i];
     }
 
     // vallidare proportii
-    double total = sum_reducing_dims + L;
+    float total = sum_reducing_dims + L;
     if (total <= 0 || C1 <= 0) return; // Avoid division by zero or invalid values
 
     // starting coords
@@ -186,8 +182,8 @@ void DrawGUI() {
     static char upper_dev[MAX_DIMENSIONS][16] = {0};
     static char lower_dev[MAX_DIMENSIONS][16] = {0};
 
-    double reducing_dims[MAX_DIMENSIONS] = {0};
-    double dev_reducing_dims[MAX_DIMENSIONS * 2] = {0};
+    float reducing_dims[MAX_DIMENSIONS] = {0};
+    float dev_reducing_dims[MAX_DIMENSIONS * 2] = {0};
 
     for (int i = 0; i < dimension_count; i++) {
         GuiLabel((Rectangle){ 120, 270 + i * 150, 200, 30 }, TextFormat("%s %d", currentLanguage->cota_micsoratoare, i + 1));
@@ -200,9 +196,9 @@ void DrawGUI() {
         dev_reducing_dims[i * 2 + 1] = TextToFloat(lower_dev[i]);
     }
 
-    double c1 = TextToFloat(cota_maritoare);
-    double dev_c1_max = TextToFloat(abatere_superioara);
-    double dev_c1_min = TextToFloat(abatere_inferioara);
+    float c1 = TextToFloat(cota_maritoare);
+    float dev_c1_max = TextToFloat(abatere_superioara);
+    float dev_c1_min = TextToFloat(abatere_inferioara);
     
     if (GuiButton((Rectangle){ 600, 300, 120, 50 }, currentLanguage->calculate)) {
         calculateLength(c1, dev_c1_max, dev_c1_min, dimension_count, reducing_dims, dev_reducing_dims, &L_nominal, &max_deviation, &min_deviation);
@@ -212,11 +208,11 @@ void DrawGUI() {
 
     GuiLabel((Rectangle){ 550, 10, 300, 40 }, currentLanguage->cota_calculata);
     GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
-    GuiLabel((Rectangle){ 650, 100, 300, 40 }, TextFormat("%.2f ", max_deviation));
+    GuiLabel((Rectangle){ 650, 100, 300, 40 }, TextFormat("%.3f ", max_deviation));
     GuiSetStyle(DEFAULT, TEXT_SIZE, 40);
     GuiLabel((Rectangle){ 575, 100, 300, 100 }, TextFormat("%.2f mm", L_nominal));
     GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
-    GuiLabel((Rectangle){ 650, 160, 300, 40 }, TextFormat("%.2f ", min_deviation));
+    GuiLabel((Rectangle){ 650, 160, 300, 40 }, TextFormat("%.3f ", min_deviation));
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
 }

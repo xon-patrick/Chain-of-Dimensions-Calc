@@ -4,7 +4,7 @@ This project calculates dimensions in a chain of dimensions based on user input 
 
 ## Features
 
-- Takes from the user the nominal value and its upper and lower deviation for the increasing dimension:
+- Takes the nominal value and its upper and lower deviation for the increasing dimension from the user:
 
 ![Increasing Dim](images/cote_maritoare.png)
 
@@ -12,7 +12,7 @@ This project calculates dimensions in a chain of dimensions based on user input 
 
 ![Reducing Dims](images/cote_micsoratoare.png)
 
-- You can add or remove reducing dimensions with buttons next to "Cote Micsoratoare":
+- Allows adding or removing reducing dimensions with buttons next to "Cote Micsoratoare":
 
 ![add/delete](images/add_or_delete.png)
 
@@ -20,7 +20,7 @@ This project calculates dimensions in a chain of dimensions based on user input 
 
 ![result](images/result.png)
 
-- Visual representations of reducing dimensions and L out of the increasing dimensions after pressing Calculate:
+- Provides visual representations of reducing dimensions and L out of the increasing dimensions after pressing Calculate:
 
 ![example](images/example.png)
 
