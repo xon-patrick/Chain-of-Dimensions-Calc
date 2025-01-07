@@ -1,6 +1,5 @@
 #include <raylib.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 float TextToFloat(const char *text) {
     return atof(text);
