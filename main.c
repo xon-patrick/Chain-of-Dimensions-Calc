@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <stdlib.h>
 
+// Convert text to float; function needed for raygui
 float TextToFloat(const char *text) {
     return atof(text);
 }
@@ -18,13 +19,13 @@ typedef struct {
 } Dimension;
 
 typedef struct {
-    const char* abatere_superioara;
-    const char* cota_maritoare;
-    const char* abatere_inferioara;
-    const char* cote_micsoratoare;
-    const char* cota_micsoratoare;
-    const char* calculate;
-    const char* cota_calculata;
+    char* abatere_superioara;
+    char* cota_maritoare;
+    char* abatere_inferioara;
+    char* cote_micsoratoare;
+    char* cota_micsoratoare;
+    char* calculate;
+    char* cota_calculata;
 } Language;
 
 Language romanian = {
@@ -62,11 +63,11 @@ Language* currentLanguage = &romanian;
 Dimension dimensions[MAX_DIMENSIONS];
 int dimension_count = 0;
 
-static int activeTextBox = -1; // active text box
+int activeTextBox = -1; // active text box
 
-static float L_nominal = 0;
-static float max_deviation = 0;
-static float min_deviation = 0;
+float L_nominal = 0;
+float max_deviation = 0;
+float min_deviation = 0;
 
 void calculateLength(float C1/*increasing dim*/, float dev_C1_max, float dev_C1_min, int num_reducing_dimensions, float reducing_dims[], float dev_reducing_dims[], float* L_nominal, float* max_deviation, float* min_deviation) {
     float sum_reducing_dims = 0;
@@ -100,7 +101,7 @@ void DrawRepresentation(float C1, float reducing_dims[], int num_reducing_dimens
 
     // vallidare proportii
     float total = sum_reducing_dims + L;
-    if (total <= 0 || C1 <= 0) return; // Avoid division by zero or invalid values
+    if (total <= 0 || C1 <= 0) return; // Avoid division by zero or negative values
 
     // starting coords
     float startX = 400;
